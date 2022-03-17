@@ -1,0 +1,24 @@
+[package]
+name = "vivint-tools"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "^1"
+async-trait = "^0.1"
+#firestore-serde = "^0.1"
+jsonwebtoken = "^8"
+openssl = "^0.10"
+reqwest = { version = "^0.11", features = ["json"] }
+serde = "^1"
+structopt = "^0.3"
+tokio = { version = "^1", features = ["full"] }
+tonic = { version = "^0.6", features = ["tls", "tls-roots"] }
+#zbus = "^2"
+
+[dependencies.googapis]
+git = "https://github.com/thrykol/googapis.git"
+features = ["google-firestore-v1-client"]
+version = "0.6.0"
