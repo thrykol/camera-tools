@@ -13,10 +13,12 @@ jsonwebtoken = "^8"
 openssl = "^0.10"
 reqwest = { version = "^0.11", features = ["json"] }
 serde = "^1"
+serde_json = "^1"
 structopt = "^0.3"
 tokio = { version = "^1", features = ["full"] }
 tonic = { version = "^0.6", features = ["tls", "tls-roots"] }
 #zbus = "^2"
+urlencoding = "^2"
 
 [dependencies.googapis]
 git = "https://github.com/thrykol/googapis.git"
