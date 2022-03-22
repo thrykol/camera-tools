@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use crate::cli::{LsOpt, Opt, ReadOpt};
+use crate::cli::{DownloadOpt, LsOpt, Opt, ReadOpt};
 
 pub mod cli;
 pub mod google;
@@ -50,6 +50,30 @@ impl TryFrom<Opt> for LsBucketSettings {
                 bucket,
                 prefix,
                 jwt,
+            }),
+            _ => unimplemented!("command {:#?} not support in ls", opt),
+        }
+    }
+}
+
+pub struct FetchObjectSettings {
+    pub bucket: String,
+    pub path: String,
+    pub jwt: String,
+    pub destination: String,
+}
+
+
+impl TryFrom<Opt> for FetchObjectSettings {
+    type Error = anyhow::Error;
+
+    fn try_from(opt: Opt) -> Result<Self, Self::Error> {
+        match opt {
+            Opt::Download(DownloadOpt { bucket, path, token, destination }) => token.ok_or_else(|| ()).or_else(|_| Settings::load_token()).map(|jwt| Self {
+                bucket,
+                path,
+                jwt,
+                destination,
             }),
             _ => unimplemented!("command {:#?} not support in ls", opt),
         }

@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fs;
 use std::time::Duration;
 
 use async_trait::async_trait;
@@ -57,7 +58,6 @@ impl Storage {
         if !prefix.ends_with('/') {
             prefix = format!("{}/", prefix);
         }
-        let _url = "https://firebasestorage.googleapis.com/v0/b/artifactosaurus/o/rpms%2Fcerberus-2.0.0-1.aarch64.rpm?alt=media";
         let url = format!("https://firebasestorage.googleapis.com/v0/b/{}/o/?prefix={}", bucket, encode(&prefix));
 
         let mut next_page = None;
@@ -76,6 +76,15 @@ impl Storage {
                 break;
             }
         }
+
+        Ok(())
+    }
+
+    pub async fn download(bucket: &str, path: &str, jwt: &str, dest: &str) -> Result<(), Box<dyn std::error::Error>> {
+        let path = encode(path);
+        let url = format!("https://firebasestorage.googleapis.com/v0/b/{}/o/{}?alt=media", bucket, path);
+        let response = Client::new().get(&url).header("authorization", format!("Bearer {}", jwt)).send().await?.bytes().await?;
+        fs::write(dest, response)?;
 
         Ok(())
     }

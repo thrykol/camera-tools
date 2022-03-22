@@ -1,6 +1,6 @@
 use structopt::StructOpt;
 
-use vivint_tools::{FetchSettings, LsBucketSettings};
+use vivint_tools::{FetchObjectSettings, FetchSettings, LsBucketSettings};
 use vivint_tools::cli::Opt;
 use vivint_tools::google::{Firestore, Storage};
 
@@ -16,6 +16,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Opt::Ls(..) => {
             let settings = LsBucketSettings::try_from(opt)?;
             let _ = Storage::ls(&settings.bucket, &settings.prefix, &settings.jwt).await?;
+        }
+        Opt::Download(..) => {
+            let settings = FetchObjectSettings::try_from(opt)?;
+            let _ = Storage::download(&settings.bucket, &settings.path, &settings.jwt, &settings.destination).await?;
         }
     }
 
